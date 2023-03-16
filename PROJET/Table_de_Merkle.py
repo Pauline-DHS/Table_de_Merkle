@@ -143,34 +143,50 @@ TTH564(M)
 #?--------------------------------------------------------------------------------------------------------
 #?########################################################################################################
 
-import binascii
-import os
+import struct
+def ParitionnementEnBlocsBinaire4096(file):
+    file_binary = ""
+    taille = 0
+    with open(file, 'rb') as f:
+        byte = f.read(1)
+        while byte:
+            # Convertir l'octet en un entier non signé (unsigned int)
+            num = struct.unpack('B', byte)[0]
+            
+            # Concaténer la représentation binaire de l'octet à la variable file_binary
+            binary = bin(num)[2:].zfill(8)  
+            taille += 1  
+            file_binary += binary
+            
+            byte = f.read(1)
 
-file = open("file.txt", "rb")
+    taille *= 8
+    # Calcul du padding à ajouter sur le dernière bloc
+    padding = 4096 - taille  % 4096
 
-# Chemin du fichier
-chemin_fichier = "file.txt"
+    # Si nécessaire ajout du padding
+    if padding != 4096: 
+        file_binary += '1'
+        taille += 1
+        for i in range(padding-1):
+            file_binary += '0'
+            taille += 1
+        
+    # Stocker les tableaux générés dans une liste
+    tableaux_data = []
 
-# Obtenir la taille du fichier en octets
-taille = os.path.getsize(chemin_fichier)
-print(taille)
+    # Arrangement matriciel de M+padding
+    nb_block = int(taille / 4096)
 
-# Calcul du padding à ajouter sur le dernière bloc
-padding = 512 - taille  % 512
+    block=[]
+    i = 1
+    while i < nb_block:
+        block = file_binary[(4096*i):((4096*i)+4096)]
+        tableaux_data.append(block)
+        print(block)
+        print(len(block))
+        print("\n------------------------\n")
+        i +=1
 
-with open('file.txt', 'rb') as f_binaire:
-    # Lire les données binaires du fichier binaire
-    donnees_binaires = f_binaire.read()
-    
-    # Convertir les données binaires en chaîne de caractères de 0 et de 1
-    donnees_binaires_string = binascii.hexlify(donnees_binaires).decode('utf-8')
-    
-    # Afficher les données binaires sous forme de chaîne de 0 et de 1
-    print(donnees_binaires_string)
 
-# Si nécessaire ajout du padding
-if padding != 512: 
-   # blocks_bits[indice_dernier_block] += '1'
-    #for i in range(padding-1):
-    #    blocks_bits[indice_dernier_block] += '0'
-    pass
+ParitionnementEnBlocsBinaire4096("file.txt")
