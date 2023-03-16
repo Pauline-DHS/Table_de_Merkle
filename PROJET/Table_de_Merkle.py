@@ -1,4 +1,8 @@
 
+#?########################################################################################################
+#?-----------------------------------------------------TTH564---------------------------------------------
+#?########################################################################################################
+
 
 # Cette fonction va permettre de convertir les blocs de bits en valeurs décimal
 def binary2decimal64(binary):
@@ -24,13 +28,13 @@ def ConversionDec(M):
     
     # Calcul du padding à ajouter sur le dernière bloc
     padding = 6 - len(blocks_bits[indice_dernier_block]) % 6
-    print(blocks_bits)
+    #print(blocks_bits)
     # Si nécessaire ajout du padding
     if padding != 6: 
         blocks_bits[indice_dernier_block] += '1'
         for i in range(padding-1):
             blocks_bits[indice_dernier_block] += '0'
-    print(blocks_bits)
+    #print(blocks_bits)
     # Convertion de chaque blocs de bit en valeur décimal
     blocks = []
     for block in blocks_bits:
@@ -41,13 +45,13 @@ def ConversionDec(M):
 def Padding(M):
     # Calcul du padding à ajouter pour avoir des gros blocs de 25
     padding = 25 - len(M) % 25
-    print(len(M))
+    #print(len(M))
     # Si nécessaire ajout du padding
     if padding != 25: 
         M.append(32)
         for i in range(padding-1):
             M.append(00)
-    print(M)
+    #print(M)
     return M
 
 def ArrangementMatriciel(M_dec):
@@ -56,8 +60,8 @@ def ArrangementMatriciel(M_dec):
     cpt = 0
     # Arrangement matriciel de M+padding
     nb_block = int(len(M_dec) / 25)
-    print(len(M_dec))
-    print(nb_block)
+    #print(len(M_dec))
+    #print(nb_block)
     for i in range(nb_block):
         # Générer un tableau avec des éléments allant de 0 à i
         tableau = [[0 for j in range(5)] for i in range(5)]
@@ -66,9 +70,6 @@ def ArrangementMatriciel(M_dec):
                 tableau[i][j] = M_dec[cpt]
                 cpt += 1
         tableaux.append(tableau)
-        for ligne in tableau:
-            print(ligne,"\n")
-        print('--------------------------')
     
     return tableaux
 
@@ -83,10 +84,10 @@ def CalculBlocEtape1(tableau,Empreinte):
             Empreinte[3] += ligne[3]
             Empreinte[4] += ligne[4]
     
-    for i in range(len(Empreinte)-1):
+    for i in range(len(Empreinte)):
         Empreinte[i] = (Empreinte[i]-(int(Empreinte[i] / 64))*64)
-    print(Empreinte)
-    print('--------------------------')
+    #print(Empreinte)
+    #print('--------------------------')
 
     return Empreinte
 
@@ -106,9 +107,6 @@ def CalculBlocEtape2(tableau):
         line.clear()
         tableau[index] = valeur_dec
         i -= 1
-    for ligne in tableau:
-        print(ligne,"\n")
-    print('--------------------------')
     return tableau
 
 # Cette fonction va permettre de hacher le message selon une fonction de hachage TTH564 inspiré 
@@ -128,22 +126,27 @@ def TTH564(M):
     tableaux = ArrangementMatriciel(M_)
     
     for tableau in tableaux:
-        print("NOVEAU TABLEAU")
+        #print("NOVEAU TABLEAU")
         Empreinte = CalculBlocEtape1(tableau,Empreinte)
         tableau = CalculBlocEtape2(tableau)
         Empreinte = CalculBlocEtape1(tableau,Empreinte)
     
-
+    result = ""
+    for case in Empreinte:
+        result += str(case)
+    
+    return result
 
 # Message clair sous forme binaire
 M = "10010101010101010100101010101010110011101010100101010101000000111110010011010110101010101101010101010101011001010101010101010010101010101010011100101010010101010100000011111001001101011010101010110101010101010101101101010101010101010100110101010010101010101011111010001001010010010101010101010101001101010100101010101010111110100010010100100"
 TTH564(M)
 
 #?########################################################################################################
-#?--------------------------------------------------------------------------------------------------------
+#?-------------------------------------------------------ARBRE DE MERKLE-----------------------------------
 #?########################################################################################################
 
 import struct
+
 def ParitionnementEnBlocsBinaire4096(file):
     file_binary = ""
     taille = 0
@@ -183,10 +186,31 @@ def ParitionnementEnBlocsBinaire4096(file):
     while i < nb_block:
         block = file_binary[(4096*i):((4096*i)+4096)]
         tableaux_data.append(block)
-        print(block)
-        print(len(block))
-        print("\n------------------------\n")
         i +=1
+    
+    return tableaux_data
 
 
-ParitionnementEnBlocsBinaire4096("file.txt")
+blocs = ParitionnementEnBlocsBinaire4096("file.txt")
+def InitialiationFeuilleMerkle(blocs):
+    tab_Emp = []
+    for bloc in blocs:
+        E1 = TTH564(bloc)
+        tab_Emp.append(E1)
+    return tab_Emp
+
+def MerkleCalcul(tab_Emp):
+    if (len(tab_Emp) == 1):
+        return tab_Emp[0]
+    i = 0
+    tab_ = []
+    for i in range(len(tab_Emp)):
+        if i+1 < len(tab_Emp):
+            tmp = tab_Emp[i] + tab_Emp[i+1]
+            E1_E2 = TTH564(tmp)
+            tab_.append(E1_E2)
+    
+    return MerkleCalcul(tab_)
+
+racine = MerkleCalcul(InitialiationFeuilleMerkle(blocs))
+print(racine)

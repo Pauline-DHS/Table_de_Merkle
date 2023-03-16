@@ -1,9 +1,19 @@
-with open('file.txt', 'rb') as f_binaire:
-    # Lire les données binaires du fichier binaire
-    donnees_binaires = f_binaire.read()
-    
-    # Convertir les données binaires en chaîne de caractères de 0 et de 1
-    donnees_binaires_string = binascii.hexlify(donnees_binaires).decode('utf-8')
-    
-    # Afficher les données binaires sous forme de chaîne de 0 et de 1
-    print(donnees_binaires_string)
+class Noeud:
+    def __init__(self, valeur, gauche=None, droit=None):
+        self.valeur = valeur
+        self.gauche = gauche
+        self.droit = droit
+
+    def est_feuille(self):
+        return self.gauche is None and self.droit is None
+
+    def __str__(self):
+        return f"Noeud({self.valeur})"
+
+class Feuille:
+    def __init__(self, valeur):
+        self.valeur = valeur
+
+    def __str__(self):
+        return f"Noeud({self.valeur})"
+

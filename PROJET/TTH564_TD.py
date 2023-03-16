@@ -75,13 +75,13 @@ def CalculBlocEtape1(tableau,Empreinte):
     # ETAPE 1 -> EMPREINTE
     
     for ligne in tableau:
-            Empreinte[0] += ligne[0]
-            Empreinte[1] += ligne[1]
-            Empreinte[2] += ligne[2]
-            Empreinte[3] += ligne[3]
-            Empreinte[4] += ligne[4]
+        Empreinte[0] += ligne[0]
+        Empreinte[1] += ligne[1]
+        Empreinte[2] += ligne[2]
+        Empreinte[3] += ligne[3]
+        Empreinte[4] += ligne[4]
     
-    for i in range(len(Empreinte)-1):
+    for i in range(len(Empreinte)):
         Empreinte[i] = (Empreinte[i]-(int(Empreinte[i] / 64))*64)
     print(Empreinte)
     print('--------------------------')
