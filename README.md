@@ -1,4 +1,4 @@
-#Projet : Contrôle d'intégrité de données avec l'arbre de Merkle
+# Projet : Contrôle d'intégrité de données avec l'arbre de Merkle
 
 # Contexte
 Ce projet a pour objectif d'expérimenter le contrôle d'intégrité de données en utilisant l'arbre de Merkle. Nous allons utiliser l'implémentation de la fonction de hachage TTH5-64.
