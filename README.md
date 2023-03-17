@@ -1,12 +1,12 @@
 #Projet : Contrôle d'intégrité de données avec l'arbre de Merkle
 
 # Contexte
-Ce projet a pour objectif d'expérimenter le contrôle d'intégrité de données en utilisant l'arbre de Merkle. Nous allons utiliser l'implémentation de la fonction de hachage TTH5-64 que nous avons réalisée lors des séances de TD. Cette implantation peut être faite dans le langage de notre choix, mais nous privilégierons les langages tels que C/C++, Python ou Java/Kotlin (langages propriétaires Windows proscrits).
+Ce projet a pour objectif d'expérimenter le contrôle d'intégrité de données en utilisant l'arbre de Merkle. Nous allons utiliser l'implémentation de la fonction de hachage TTH5-64.
 
 Les arbres de Merkle permettent un contrôle d'intégrité d'un ensemble de données (par exemple, un fichier) sur la base d'une possession partielle. Ce projet va nous permettre de le vérifier.
 
 # Contrôle d'intégrité
-Le contrôle d'intégrité "cryptographique" suppose l'utilisation d'une fonction de hachage cryptographique. Ainsi, en connaissant la valeur 0xBB3C associée à DATA, nous pouvons contrôler son intégrité en calculant TTH5-64(DATA) = 0xBB3C. Pour ce TP noté, DATA sera n'importe quel fichier de notre choix.
+Le contrôle d'intégrité "cryptographique" suppose l'utilisation d'une fonction de hachage cryptographique. Ainsi, en connaissant la valeur 0xBB3C associée à DATA, nous pouvons contrôler son intégrité en calculant TTH5-64(DATA) = 0xBB3C.
 
 # Partitionnement en blocs
 DATA peut également être considérée comme une concaténation de blocs de données. Nous proposerons une implantation d'un tel partitionnement à partir d'un fichier, en considérant des blocs de 512 octets. Dans le cas où la taille du fichier à partitionner n'est pas multiple de 512, nous procéderons, comme nous avons vu en TP, au bourrage du dernier bloc à 512 en utilisant le vecteur 10000000...00000. Bien entendu, la reconstruction de DATA suppose, le cas échéant, le débourrage de ce dernier bloc.
