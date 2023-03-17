@@ -81,7 +81,7 @@ def CalculBlocEtape1(tableau,Empreinte):
         Empreinte[3] += ligne[3]
         Empreinte[4] += ligne[4]
     
-    for i in range(len(Empreinte)):
+    for i in range(len(Empreinte)-1):
         Empreinte[i] = (Empreinte[i]-(int(Empreinte[i] / 64))*64)
     print(Empreinte)
     print('--------------------------')
@@ -126,7 +126,6 @@ def TTH564(M):
     tableaux = ArrangementMatriciel(M_)
     
     for tableau in tableaux:
-        print("NOVEAU TABLEAU")
         Empreinte = CalculBlocEtape1(tableau,Empreinte)
         tableau = CalculBlocEtape2(tableau)
         Empreinte = CalculBlocEtape1(tableau,Empreinte)

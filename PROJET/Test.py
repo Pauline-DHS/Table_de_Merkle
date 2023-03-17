@@ -10,10 +10,6 @@ class Noeud:
     def __str__(self):
         return f"Noeud({self.valeur})"
 
-class Feuille:
-    def __init__(self, valeur):
-        self.valeur = valeur
 
-    def __str__(self):
-        return f"Noeud({self.valeur})"
-
+for bloc in blocs:
+    
